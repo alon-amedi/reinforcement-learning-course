@@ -233,25 +233,11 @@ class Human:
                 env.board[i][j] = self.symbol
                 break
 
-    # def update_state_history(self, state):
-    #     """
-    #     add state to the state history - needs the be called after every turn, not only turns of this Agent
-    #     :param state:
-    #     """
-    #     pass
-    #
-    # def update(self, env):
-    #     """
-    #     query the env for the latest reward (called at the end of an episode - this is where all the learning happens)
-    #     we want to backtrack our states so that:
-    #     V(prev_state) = V(prev_state) + alpha*(V(next_state) - V(prev_state))
-    #     where V(prev_state) = reward if it's the most current state
-    #
-    #     NOTE: we only do this at the end of an episode, this is not the case for all the RL algorithms
-    #     :param env:
-    #     :return:
-    #     """
-    #     pass
+    def update_state_history(self, state):
+        pass
+
+    def update(self, env):
+        pass
 
 
 def get_state_hash_and_winner(env, i=0, j=0):
