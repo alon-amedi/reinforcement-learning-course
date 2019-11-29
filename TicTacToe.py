@@ -68,18 +68,19 @@ class Agent:
                     next_move = (i, j)
 
             if self.verbose:
+                dash_line = "-"*23
                 print("Exploiting: Taking a greedy action")
                 d = {env.x: "x", env.o: "o"}
                 for i in range(env.length):
-                    print("----------------")
+                    print(dash_line)
                     for j in range(env.length):
                         if env.is_empty(i, j):
-                            print(" %.2f|" % pos2val[(i, j)], end="")
+                            print("  %.2f|" % pos2val[(i, j)], end="")
                         else:
-                            print(" ", end="")
+                            print("  ", end="")
                             print(d.get(env.board[i][j]) + " |", end="")
                     print("")
-                print("----------------")
+                print(dash_line)
 
                 # env.draw_board()
                 # for (i, j) in sorted(pos2val.keys(), key=lambda x: x[0]):
@@ -148,7 +149,7 @@ class TTTEnv:
         representations e.g. all board filled with "x"
         :return:
         """
-        k = 0  # 0-8
+        k = 0  # running index from 0 to board's size-1 (e.g. board size 3X3 -> k=[0,8]
         hash = 0
         switch_dict = {0: 0, self.x: 1, self.o: 2}
         for i in range(self.length):
@@ -166,8 +167,8 @@ class TTTEnv:
         symbol_dict = {self.x: "x", self.o: "o"}
         for i in range(self.length):
             for j in range(self.length):
-                board_string += "|"
-                board_string += symbol_dict.get(self.board[i, j], " ")
+                board_string += f"|  {symbol_dict.get(self.board[i, j], ' ')}  "
+
             board_string += "|\n"
         print(board_string)
 
