@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from grid_world import standard_grid, negative_grid
-from iterative_policy_evaluation import print_policy, print_values
+from grid_world_utils import *
 from collections import defaultdict
 
 """
@@ -11,10 +11,6 @@ Note the changes -
 3. the convergence flag moved to the iterative_policy_eval finction which now needs to know about the possible actions 
     in order to find max value over actions rather argmax value
 """
-# constants
-TH = 10e-4
-GAMMA = 0.9
-POSSIBLE_ACTIONS = ('U', 'D', 'L', 'R')
 
 
 def iterative_policy_eval(g, gamma, state_values, policy, th, allowed_actions):

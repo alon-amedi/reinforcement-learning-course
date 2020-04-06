@@ -1,13 +1,9 @@
+from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
 from grid_world import standard_grid, negative_grid
-from iterative_policy_evaluation import print_policy, print_values
-from collections import defaultdict
+from grid_world_utils import *
 
-# constants
-TH = 10e-4
-GAMMA = 0.9
-POSSIBLE_ACTIONS = ('U', 'D', 'L', 'R')
 
 
 def iterative_policy_eval(g, gamma, state_values, policy, th, possible_actions):

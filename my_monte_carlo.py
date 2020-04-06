@@ -1,12 +1,7 @@
 from collections import defaultdict
 import numpy as np
 from grid_world import standard_grid, negative_grid
-from iterative_policy_evaluation import print_values, print_policy
-
-# constants
-TH = 10e-4
-GAMMA = 0.9
-POSSIBLE_ACTIONS = ('U', 'D', 'L', 'R')
+from grid_world_utils import *
 
 
 def play_game(grid, policy, gamma):
