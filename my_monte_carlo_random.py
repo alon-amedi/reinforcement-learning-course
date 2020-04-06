@@ -9,6 +9,20 @@ GAMMA = 0.9
 POSSIBLE_ACTIONS = ('U', 'D', 'L', 'R')
 
 
+def random_action(a, possible_actions, p_a = 0.5):
+    """
+    choose an action with probability distribution of p(a) = 0.5, p(!a) = 1-p(a) / len(other_actions)
+    :param a: intendant action
+    :param possible_actions: all possible actions for that state
+    :param p_a: probability of doing the intent action
+    :return: effective action to follow
+    """
+    assert 0 <= p_a <= 1, f"p_a must be in [0, 1], got p_a={p_a}"
+    other_actions = list(set(possible_actions) - {a})
+    r = np.random.random()
+    return a if r < p_a else np.random.choice(other_actions)
+
+
 def play_game(grid, policy, gamma):
     """
     Simulates a game run to evaluate a given policy on a grid.
@@ -31,7 +45,8 @@ def play_game(grid, policy, gamma):
     states_and_rewards = [(grid.current_state(), 0)]  # list of tuples of (state, reward)
     while not grid.game_over():
         a = policy[grid.current_state()]
-        r = grid.move(a)
+        effective_a = random_action(a, POSSIBLE_ACTIONS)
+        r = grid.move(effective_a)
         states_and_rewards.append((grid.current_state(), r))
 
     g = 0
@@ -48,17 +63,17 @@ def play_game(grid, policy, gamma):
 if __name__ == "__main__":
     grid = standard_grid()
 
-    ### fixed policy ###
+    ### Different fixed policy - always try to get to the winning state ###
     policy = {
         (2, 0): 'U',
         (1, 0): 'U',
         (0, 0): 'R',
         (0, 1): 'R',
         (0, 2): 'R',
-        (1, 2): 'R',
-        (2, 1): 'R',
-        (2, 2): 'R',
-        (2, 3): 'U',
+        (1, 2): 'U',
+        (2, 1): 'L',
+        (2, 2): 'U',
+        (2, 3): 'L',
     }
 
     states = grid.all_states()
