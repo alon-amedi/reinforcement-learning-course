@@ -2,6 +2,7 @@
 
 TH = 10e-4
 GAMMA = 0.9
+ALPHA = 0.1
 POSSIBLE_ACTIONS = ('U', 'D', 'L', 'R')
 
 
