@@ -83,7 +83,6 @@ if __name__ == "__main__":
             if s not in already_seen:
                 all_returns[s].append(g)
                 V[s] = float(np.mean(all_returns[s]))
-                print(V[s])
                 already_seen[s] = True
 
     print("Rewards:")
