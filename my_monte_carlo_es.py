@@ -66,7 +66,7 @@ if __name__ == "__main__":
     grid = negative_grid()
 
     policy = fixed_policy_always_win
-    policy = {s: np.random.choice(POSSIBLE_ACTIONS) for s in grid.actions.keys()}
+    policy = {s: np.random.choice(ALL_POSSIBLE_ACTIONS) for s in grid.actions.keys()}
 
     returns = defaultdict(list)
     Q = defaultdict(lambda: defaultdict(float))
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
         if t % 100 == 0:
             print(f"Iteration: {t}")
-        s_a = get_start_conditions(list(grid.actions.keys()), POSSIBLE_ACTIONS)
+        s_a = get_start_conditions(list(grid.actions.keys()), ALL_POSSIBLE_ACTIONS)
 
         states_actions_returns = play_game_exploring_start(grid, policy, s_a)
         already_seen = defaultdict(bool)

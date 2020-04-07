@@ -33,7 +33,7 @@ def play_game(grid, policy):
     grid.set_state(state)
     states_and_rewards = [(state, 0)]
     while not grid.game_over():
-        action = get_random_action(policy[state], POSSIBLE_ACTIONS)
+        action = get_random_action(policy[state], ALL_POSSIBLE_ACTIONS)
         reward = grid.move(action)
         state = grid.current_state()
         states_and_rewards.append((state, reward))

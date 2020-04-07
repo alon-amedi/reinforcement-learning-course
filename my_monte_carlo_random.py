@@ -40,7 +40,7 @@ def play_game(grid, policy, gamma):
     states_and_rewards = [(grid.current_state(), 0)]  # list of tuples of (state, reward)
     while not grid.game_over():
         a = policy[grid.current_state()]
-        effective_a = random_action(a, POSSIBLE_ACTIONS)
+        effective_a = random_action(a, ALL_POSSIBLE_ACTIONS)
         r = grid.move(effective_a)
         states_and_rewards.append((grid.current_state(), r))
 

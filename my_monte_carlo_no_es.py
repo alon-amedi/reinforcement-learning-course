@@ -22,7 +22,7 @@ def play_game(grid, policy):
 
     # print("playing game")
     state = (2, 0)
-    action = get_random_action(policy[state], POSSIBLE_ACTIONS)
+    action = get_random_action(policy[state], ALL_POSSIBLE_ACTIONS)
     grid.set_state(state)
     reward = 0
     # Note that the triplets are (s(t), a(t), r(t)) -  where r(t) is the result of
@@ -38,7 +38,7 @@ def play_game(grid, policy):
             states_actions_rewards.append((state, None, reward))
             break
         else:
-            action = get_random_action(policy[state], POSSIBLE_ACTIONS)
+            action = get_random_action(policy[state], ALL_POSSIBLE_ACTIONS)
             states_actions_rewards.append((state, action, reward))
     # Calculate returns
     states_actions_rewards.reverse()
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # grid = standard_grid()
     grid = negative_grid()
 
-    policy = {s: np.random.choice(POSSIBLE_ACTIONS) for s in grid.actions.keys()}
+    policy = {s: np.random.choice(ALL_POSSIBLE_ACTIONS) for s in grid.actions.keys()}
 
     returns = defaultdict(list)
     Q = defaultdict(lambda: defaultdict(float))

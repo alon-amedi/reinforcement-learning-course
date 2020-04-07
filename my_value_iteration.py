@@ -69,7 +69,7 @@ if __name__ == "__main__":
     print_values(grid.rewards, grid)
 
     # Step 1: initialize policy and state values
-    policy = dict(zip(grid.actions.keys(), np.random.choice(POSSIBLE_ACTIONS, len(grid.actions.keys()))))
+    policy = dict(zip(grid.actions.keys(), np.random.choice(ALL_POSSIBLE_ACTIONS, len(grid.actions.keys()))))
 
     V = defaultdict(int)
     for s in grid.actions:
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         # Step 2: evaluate V(s) for current policy
         print(f"Evaluating V(s) for current policy:")
         print_policy(policy, grid)
-        is_policy_converged, V = iterative_policy_eval(grid, GAMMA, V, policy, TH, POSSIBLE_ACTIONS)
+        is_policy_converged, V = iterative_policy_eval(grid, GAMMA, V, policy, TH, ALL_POSSIBLE_ACTIONS)
         print("Evaluated V(s):")
         print_values(V, grid)
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
             break
 
         # Step 3: improve policy - go over each step in the policy
-        policy = imporve_policy(grid, policy, V, GAMMA, POSSIBLE_ACTIONS)
+        policy = imporve_policy(grid, policy, V, GAMMA, ALL_POSSIBLE_ACTIONS)
 
     print("Values:")
     print_values(V, grid)
