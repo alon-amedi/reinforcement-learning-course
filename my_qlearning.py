@@ -3,23 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from grid_world import standard_grid, negative_grid
 from grid_world_utils import *
-
-
-def get_random_action(a, possible_actions, epsilon=0.1):
-    """
-    use soft-greedy to choose an action to perform
-    :param a: policy action
-    :param possible_actions: all possible actions from
-    :param epsilon: exploration probability, defaults to 0.1
-    :return: action to perform
-    """
-    assert 0.0 < epsilon < 1.0, "epsilon must be in [0, 1]"
-    r = np.random.random()
-    return a if r <= (1-epsilon) else np.random.choice(list(set(possible_actions).difference(a)))
-
-
-def argmax_and_max_on_dict(dt):
-    return sorted(dt.items(), key=lambda x: x[1])[-1]
+from my_sarsa import get_random_action, argmax_and_max_on_dict
 
 
 # Note there's not play_game function as we are updating along the game, meaning this is fully online
@@ -50,25 +34,33 @@ if __name__ == "__main__":
             print(f"Iteration: {it} , t: {t}")
 
         s = (2, 0)
+        effective_action = argmax_and_max_on_dict(Q[s])[0]
         grid.set_state(s)
-        a = argmax_and_max_on_dict(Q[s])[0]
-        a = get_random_action(a, ALL_POSSIBLE_ACTIONS, epsilon=0.5/t)
-
         biggest_change = 0
         while not grid.game_over():
-            r = grid.move(a)
-            s_next = grid.current_state()
-            a_next = argmax_and_max_on_dict(Q[s_next])[0]
-            a_next = get_random_action(a_next, ALL_POSSIBLE_ACTIONS, 0.5 / t)
+            # in Q-learning we have an effective action that actually take place.
+            # We select in randomly as Q-learning is an off policy method.
 
-            alpha = ALPHA / update_counts_sa[s][a]
-            update_counts_sa[s][a] += 0.005
-            old_qsa = Q[s][a]
-            Q[s][a] = old_qsa + alpha * (r + GAMMA * Q[s_next][a_next] - old_qsa)
-            biggest_change = max(biggest_change, np.abs(old_qsa - Q[s][a]))
+            # Note that we don't use uniform distribution to sample the effective actions
+            effective_action = get_random_action(effective_action, ALL_POSSIBLE_ACTIONS, 0.5/t)
+            r = grid.move(effective_action)
+            s_next = grid.current_state()
+
+            # updating according to action taken
+            alpha = ALPHA / update_counts_sa[s][effective_action]
+            update_counts_sa[s][effective_action] += 0.005
+
+            max_a, max_Q = argmax_and_max_on_dict(Q[s_next])
+
+            old_qsa = Q[s][effective_action]
+            Q[s][effective_action] = old_qsa + alpha * (r + GAMMA * max_Q - old_qsa)
+            biggest_change = max(biggest_change, np.abs(old_qsa - Q[s][effective_action]))
 
             update_counts[s] += 1
-            s, a = s_next, a_next
+            # Note the update for the action -
+            # this is meaningless if we use uniform distribution for sampling in the next iteration
+            # but here we use a function that gives an edge to the policy
+            s, effective_action = s_next, max_a
 
         deltas.append(biggest_change)
     plt.plot(deltas)
