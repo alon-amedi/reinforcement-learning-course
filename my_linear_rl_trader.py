@@ -297,25 +297,31 @@ if __name__ == "__main__":
     maybe_make_dir(models_folder)
     maybe_make_dir(rewards_folder)
 
-    print("loading Data")
+    print("Loading data..")
     data = get_data()
-    n_timesteps, n_stocks = data.shape
+    print("Complete!")
 
+    n_timesteps, n_stocks = data.shape
     n_train = n_timesteps // 2
 
+    print("Split to train and test sets")
     train_data = data[:n_train]
     test_data = data[n_train:]
 
+    print("Setting env and agent")
     env = MultiStockEnv(train_data, initial_investment)
     state_size = env.state_dim
     action_size = len(env.action_space)
     agent = Agent(state_size, action_size)
+
+    print("Creating scaler")
     scaler = get_scaler(env)
 
     # store the final value of the portfolio (end of episode)
     portfolio_value = []
 
     if args.mode == 'test':
+        print("Test mode - loading trained models")
         # then load the previous scaler
         with open(f'{models_folder}/scaler.pkl', 'rb') as f:
             scaler = pkl.load(f)
@@ -331,6 +337,7 @@ if __name__ == "__main__":
         agent.load(f'{models_folder}/linear.npz')
 
     # play the game n_episodes times
+    print("Running episodes")
     for e in range(n_episodes):
         t0 = datetime.now()
         val = play_one_episode(agent, env, args.mode)
