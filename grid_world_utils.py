@@ -28,6 +28,7 @@ def print_policy(P, g):
         print("")
     print("")
 
+
 fixed_policy_win_or_lose = {
         (2, 0): 'U',
         (1, 0): 'U',

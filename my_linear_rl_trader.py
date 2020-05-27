@@ -2,7 +2,6 @@ import os
 import itertools
 import argparse
 from datetime import datetime
-import re
 import pickle as pkl
 
 import numpy as np
@@ -27,7 +26,7 @@ def get_scaler(env):
     # Note: you could also populate the replay buffer here
 
     states = []
-    for _ in range(env.n_step):
+    for i in range(env.n_step):
         action = np.random.choice(env.action_space)
         state, reward, done, info = env.step(action)
         states.append(state)
@@ -54,7 +53,7 @@ class LinearModel:
         self.vW = 0
         self.vb = 0
 
-        self.losos = []
+        self.losses = []
 
     def predict(self, x):
         """
@@ -94,7 +93,7 @@ class LinearModel:
         self.b += self.vb
 
         # log the current loss to losses
-        self.lossed.append[np.mean((y_hat - y) ** 2)]
+        self.losses.append(np.mean((y_hat - y) ** 2))
 
     def load_weights(self, filepath):
         """
@@ -210,14 +209,15 @@ class MultiStockEnv:
             self.stock_owned[s] = 0
 
         # buying strategy is to buy one of each stock we wish to buy until we have no sufficient funds
-        can_buy = True
-        while can_buy:
-            for b in buy_idx:
-                if self.cash >= self.stock_price[b]:
-                    self.cash -= self.stock_price[b]
-                    self.stock_owned[b] += 1 # one at a time
-                else:
-                    can_buy = False
+        if buy_idx:
+            can_buy = True
+            while can_buy:
+                for b in buy_idx:
+                    if self.cash >= self.stock_price[b]:
+                        self.cash -= self.stock_price[b]
+                        self.stock_owned[b] += 1 # one at a time
+                    else:
+                        can_buy = False
 
 
 class Agent:
@@ -276,7 +276,7 @@ def play_one_episode(agent, env, is_train):
             agent.train(state, action, reward, next_state, done)
         state = next_state
 
-    return info["current_val"]
+    return info["current_value"]
 
 
 if __name__ == "__main__":

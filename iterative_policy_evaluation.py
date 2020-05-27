@@ -6,7 +6,7 @@
 # sudo pip install -U future
 import numpy as np
 from grid_world import standard_grid
-
+from grid_world_utils import print_values, print_policy
 SMALL_ENOUGH = 1e-3  # threshold for convergence
 
 

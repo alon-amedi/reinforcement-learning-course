@@ -5,7 +5,6 @@ from grid_world import standard_grid, negative_grid
 from grid_world_utils import *
 
 
-
 def iterative_policy_eval(g, gamma, state_values, policy, th, possible_actions):
     g_states = g.all_states()
     values = state_values.copy()
