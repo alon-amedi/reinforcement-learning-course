@@ -22,8 +22,9 @@ def get_policy_uniform_probs(policy):
     return probs
 
 
-def iterative_policy_evaluation(states, policy, gamma, th):
-    V = init_Vs(states)
+def iterative_policy_evaluation(grid, policy, gamma, th, vs=None):
+    states = grid.all_states()
+    V = init_Vs(states) if vs is None else vs
 
     # repeat until convergence
     while True:
@@ -61,11 +62,10 @@ if __name__ == '__main__':
     # states will be positions (i,j)
     # simpler than tic-tac-toe because we only have one "game piece"
     # that can only be at one position at a time
-    states = grid.all_states()
 
     ### uniformly random actions ###
     random_policy_probs = get_policy_uniform_probs(grid.actions)
-    V_random_policy = iterative_policy_evaluation(states, random_policy_probs, 1.0, SMALL_ENOUGH)
+    V_random_policy = iterative_policy_evaluation(grid, random_policy_probs, 1.0, SMALL_ENOUGH)
 
     print("values for uniformly random actions:")
     print_values(V_random_policy, grid)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     print_policy(policy, grid)
 
     fixed_policy_probs = get_policy_uniform_probs(policy)
-    V_fixed_policy = iterative_policy_evaluation(states, fixed_policy_probs, 0.9, SMALL_ENOUGH)
+    V_fixed_policy = iterative_policy_evaluation(grid, fixed_policy_probs, 0.9, SMALL_ENOUGH)
 
     print("values for fixed policy:")
     print_values(V_fixed_policy, grid)
