@@ -40,14 +40,24 @@ def imporve_policy(grid, policy, states_values, gamma, allowed_actions, intent_p
     return is_converged, improved_policy
 
 
+def get_policy_probs(policy, is_deterministic, intent_action_prob, possible_actions):
+    policy_probs = {
+        s: [(aa, intent_action_prob if aa == a else (1 - intent_action_prob) / (len(ALL_POSSIBLE_ACTIONS) - 1))
+            for aa in ALL_POSSIBLE_ACTIONS] for s, a in policy.items()}
+
+
 if __name__ == "__main__":
 
     np.random.seed(123)
 
-    is_windy = False #True # False
+    is_windy = True  # False
+    is_deterministic = False
+
     intent_action_prob = 0.5 if is_windy else 1.0
 
-    grid = negative_grid(-0.1)  # standard_grid()
+    grid = negative_grid(-0.1)
+    # grid = negative_grid(-1.0)
+    # grid = standard_grid()
     print_values(grid.rewards, grid)
 
     # Step 1: initialize policy and state values
@@ -66,8 +76,8 @@ if __name__ == "__main__":
         # Step 2: evaluate V(s) for current policy
         print(f"Evaluating V(s) for current policy:")
         print_policy(policy, grid)
-        policy_probs = {s: [(aa, intent_action_prob if aa == a else (1-intent_action_prob) / 3) for aa in ALL_POSSIBLE_ACTIONS]
-                        for s, a in policy.items()}
+        policy_probs = {s: [(aa, intent_action_prob if aa == a else (1-intent_action_prob) / (len(ALL_POSSIBLE_ACTIONS)-1))
+                            for aa in ALL_POSSIBLE_ACTIONS] for s, a in policy.items()}
 
         V = iterative_policy_evaluation(grid, policy_probs, GAMMA, TH, V)
         # V = iterative_policy_eval(grid, GAMMA, V, policy, TH, ALL_POSSIBLE_ACTIONS)
